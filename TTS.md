@@ -460,6 +460,7 @@ Also note, **pageURL** is a required field when using multiple players as well a
 
 ### Custom text selector
 
+Note - This is a custom setting - and only available to enterprise customers
 By default, the text selector is controlled by the unit configuration. But if you want to take control over it, or use multiple players on one page, say, in an SPA, you can pass you own CSS text selector. This technique is useful when you have multiple articles on a page and want each player to read its own article.
 
 In order to do that, just pass a `textSelector` parameter to Trinity tag. Selector value should be encoded into base64 and the resulting string should be URI encoded.
