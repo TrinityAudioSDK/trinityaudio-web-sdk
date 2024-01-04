@@ -2,8 +2,8 @@
 
 *This document describes how to integrate Pulse Player into a page, how to configure and control it*
 
-> Updated: Dec 21, 2023
-> Document version: 2.0
+> Updated: Jan 3, 2024
+> Document version: 2.1
 
 ## Integration
 
@@ -12,7 +12,7 @@ In order to integrate player into your page, place the player `iframe` tag into 
 Player tag looks like:
 
 ```html
-<script src="https://trinitymedia.ai/player/pulse-js/<UNIT_ID>/?playlist=<PLAYLIST_URL>&pageURL=<PAGE_URL>"></script>
+<script src="https://trinitymedia.ai/player/pulse-js/<UNIT_ID>/?playlist=<PLAYLIST_URL>"></script>
 <div class="trinity-pulse-pb" style="font:10px/18px Verdana,Arial;display:flex;justify-content:flex-end;margin-right:5px">
   <strong style="font-weight:400;margin: 0 3px 0 0">Powered by</strong>
   <a href="https://trinityaudio.ai" style="color:#4b4a4a;text-decoration:none;font-weight:700">trinityaudio.ai</a>
@@ -23,7 +23,7 @@ In case of putting Pulse on article page, just remove `playlist`, and we'll rend
 metadata.
 
 ```html
-<script src="https://trinitymedia.ai/player/pulse-js/<UNIT_ID>/?pageURL=<PAGE_URL>"></script>
+<script src="https://trinitymedia.ai/player/pulse-js/<UNIT_ID>/"></script>
 <div class="trinity-pulse-pb" style="font:10px/18px Verdana,Arial;display:flex;justify-content:flex-end;margin-right:5px">
     <strong style="font-weight:400;margin: 0 3px 0 0">Powered by</strong>
     <a href="https://trinityaudio.ai" style="color:#4b4a4a;text-decoration:none;font-weight:700">trinityaudio.ai</a>
@@ -43,7 +43,7 @@ Place the player tag wherever you'd like it to render, e.g.
 </head>
 <body>
 <div class="content">Hello!</div>
-<script src="https://trinitymedia.ai/player/pulse-js/<UNIT_ID>/?playlist=<PLAYLIST_URL>&pageURL=<PAGE_URL>"></script>
+<script src="https://trinitymedia.ai/player/pulse-js/<UNIT_ID>/?playlist=<PLAYLIST_URL>"></script>
 <div class="trinity-pulse-pb" style="font:10px/18px Verdana,Arial;display:flex;justify-content:flex-end;margin-right:5px">
     <strong style="font-weight:400;margin: 0 3px 0 0">Powered by</strong>
     <a href="https://trinityaudio.ai" style="color:#4b4a4a;text-decoration:none;font-weight:700">trinityaudio.ai</a>
@@ -62,7 +62,6 @@ settings in your campaign for all players.
 | Name                               | Description                                                                                                         | Rewriting unit settings? | Values                                                               |
 |------------------------------------|---------------------------------------------------------------------------------------------------------------------|--------------------------|----------------------------------------------------------------------|
 | [**playlist**](#encode-parameters) | **Required**. RSS Playlist URL                                                                                      |                          |                                                                      |
-| [**pageURL**](#encode-parameters)  | **Required**. Current page URL                                                                                      |                          |                                                                      |
 | themeId                            | Set theme ID                                                                                                        | +                        |                                                                      |
 | mobile                             | Set force mobile mode                                                                                               | +                        | 1/0                                                                  |
 | browseMode                         | Set force browse mode                                                                                               | +                        | 1/0                                                                  |
