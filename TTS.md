@@ -2,8 +2,8 @@
 
 *This document describes how to integrate the Trinity Audio Player into a page as well as how to configure and control it*
 
-> Updated: Mar 27, 2023
-> Document version: 2.6
+> Updated: Mar 5, 2024
+> Document version: 3.0
 
 ## Integration
 
@@ -33,17 +33,16 @@ Include the player `<script>` tag into the **HTML** `<head>` tag.
   </head>
   <body>
     <div class="content">Hello!</div>
+
+    <!-- placeholder where player should be rendered -->
+    <div class="trinityAudioPlaceholder">
+        <div class="trinity-tts-pb" dir="ltr" style="font: 12px / 18px Verdana, Arial; height: 80px; line-height: 80px; text-align: left; margin: 0 0 0 82px;">
+          <strong style="font-weight: 400">Getting your <a href="//trinityaudio.ai" style="color: #4b4a4a; text-decoration: none; font-weight: 700;">Trinity Audio</a> player ready...</strong>
+        </div>
+    </div>
+
   </body>
 </html>
-```
-
-In that case, the player will be appended right into the `body` tag. In order to control where exactly it should get rendered, you can create a `div` tag with `trinityAudioPlaceholder` class in the desired place, e.g.
-
-```html
-<header></header>
-<div class="trinityAudioPlaceholder"></div>
-<article></article>
-<footer></footer>
 ```
 
 ### BODY (Dynamic)
@@ -61,6 +60,9 @@ Put the player tag wherever you want inside the `body` tag, and it will get rend
     <div class="content">Hello!</div>
     <script src="https://trinitymedia.ai/player/trinity/XXXXXXX/?pageURL=YOUR_ENCODED_PAGE_URL_HERE"
             charset="UTF-8"></script>
+    <div class="trinity-tts-pb" dir="ltr" style="font: 12px / 18px Verdana, Arial; height: 80px; line-height: 80px; text-align: left; margin: 0 0 0 82px;">
+        <strong style="font-weight: 400">Getting your <a href="//trinityaudio.ai" style="color: #4b4a4a; text-decoration: none; font-weight: 700;">Trinity Audio</a> player ready...</strong>
+    </div>
     <article></article>
     <footer></footer>
   </body>
@@ -74,10 +76,17 @@ You can use the following script to inject player with correct `pageURL` for you
   const scriptEl = document.createElement('script');
   scriptEl.setAttribute('fetchpriority', 'high');
   scriptEl.setAttribute('charset', 'UTF-8');
-  scriptEl.src = 'https://trinitymedia.ai/player/trinity/XXXXXXX/?pageURL='
-    + encodeURIComponent(window.location.href);
+
+  const scriptURL = new URL('https://trinitymedia.ai/player/trinity/XXXXXXX/');
+  scriptURL.searchParams.set('pageURL', window.location.href);
+
+  scriptEl.src = scriptURL.toString();
+
   document.currentScript.parentNode.insertBefore(scriptEl, document.currentScript);
 </script>
+<div class="trinity-tts-pb" dir="ltr" style="font: 12px / 18px Verdana, Arial; height: 80px; line-height: 80px; text-align: left; margin: 0 0 0 82px;">
+    <strong style="font-weight: 400">Getting your <a href="//trinityaudio.ai" style="color: #4b4a4a; text-decoration: none; font-weight: 700;">Trinity Audio</a> player ready...</strong>
+</div>
 ```
 
 
@@ -85,31 +94,31 @@ You can use the following script to inject player with correct `pageURL` for you
 
 Trinity Player accepts various query parameters, so you can change its configuration on the fly without changing those settings on the unit level for all pages.
 
-| Name | Description | Rewriting unit settings? | Values|
-|--|--|--|--|
-| **XXXXXXX** | **Required**. Your unit ID  |  |
-| [**pageURL**](#encode-pageurl) | **Required**. Encoded URL of your page | | e.g. https%3A%2F%2F<br>example.com%2Fpage-1%2Farticle-1
-| language | Text language | + | en, es, it, fr, de, pt |
-| partner | Partner name  |  |
-| FAB | FAB view. Player becomes small FAB when user scrolls and player disappears from view. Can be only enabled  | + | 1 |
-| abtest | A/B testing for player view. For more information please contact us. | + |
-| voiceGender|Gender of voice |+|m, f. NOTE: Rewrites gender if set |
-| voiceId | Desired voice ID | + | To get the full list of supported voice ID's visit the dashboard and choose at the Player configuration screen |
-| playbackSpeed | Reading speed |+| 0.5 - 2 |
-| textSelector|[Custom text selector](#custom-text-selector) | + |
-| readContentType|URL to read text from instead of the original one, located by provider selector|+|
-| readContentConfig| [JSON config](#passing-config) | + |
-| [documentLoadType](#document-load-scenario) | Type of document load scenario||DOMContentLoaded, <br>onload,<br> onSelectorVisible,<br> onSelectorExists |
-| [documentLoadTypeSelector](#document-load-scenario) | [CSS selector](#passing-css-selector) when `documentLoadType` is `onSelectorVisible` or `onSelectorExists` type | | |
-| multipleArticlesAlg|Enable playlist of popular articles from the same domain | + | byContentStarted |
-| adMaxDurationAllowed | Advertisement length limitation in seconds | + | e.g. 30 |
-| subscriber| Disable Ads | + | 1 |
-| publisherUserId| Identifier of your visitor that will be stored in the Trinity player | | Any custom identifier, for example a UUID|
-| g_cust_params| additional parameters to pass to Google IMA. Should be URL encoded |  | param1%3Dabc%26param2%3D123 |
-| cms| [cms attribute](#passing-cms-attribute) to automatically index the content created into the CMS |  | cms=%7B%22channelHash%22%3A%22a5gTS...success%22%5D%7D|
-| themeId | Player theme id | + |  |
-| publisherSections | Use this field to pass the different section of the content page. This will be used for indexing and reporting. | - | |
-| shareEnabled | Enable/disable share functionality | + | 1/0 |
+| Name                                                | Description                                                                                                     | Rewriting unit settings? | Values                                                                                                         |
+|-----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|--------------------------|----------------------------------------------------------------------------------------------------------------|
+| **XXXXXXX**                                         | **Required**. Your unit ID                                                                                      |                          |                                                                                                                |
+| [**pageURL**](#encode-pageurl)                      | **Required**. Encoded URL of your page                                                                          |                          | e.g. https%3A%2F%2F<br>example.com%2Fpage-1%2Farticle-1                                                        |
+| language                                            | Text language                                                                                                   | +                        | en, es, it, fr, de, pt                                                                                         |
+| partner                                             | Partner name                                                                                                    |                          |
+| FAB                                                 | FAB view. Player becomes small FAB when user scrolls and player disappears from view. Can be only enabled       | +                        | 1                                                                                                              |
+| abtest                                              | A/B testing for player view. For more information please contact us.                                            | +                        |
+| voiceGender                                         | Gender of voice                                                                                                 | +                        | m, f. NOTE: Rewrites gender if set                                                                             |
+| voiceId                                             | Desired voice ID                                                                                                | +                        | To get the full list of supported voice ID's visit the dashboard and choose at the Player configuration screen |
+| playbackSpeed                                       | Reading speed                                                                                                   | +                        | 0.5 - 2                                                                                                        |
+| textSelector                                        | [Custom text selector](#custom-text-selector)                                                                   | +                        |
+| readContentType                                     | URL to read text from instead of the original one, located by provider selector                                 | +                        |
+| readContentConfig                                   | [JSON config](#passing-config)                                                                                  | +                        |
+| [documentLoadType](#document-load-scenario)         | Type of document load scenario                                                                                  |                          | DOMContentLoaded, <br>onload,<br> onSelectorVisible,<br> onSelectorExists                                      |
+| [documentLoadTypeSelector](#document-load-scenario) | [CSS selector](#passing-css-selector) when `documentLoadType` is `onSelectorVisible` or `onSelectorExists` type |                          |                                                                                                                |
+| multipleArticlesAlg                                 | Enable playlist of popular articles from the same domain                                                        | +                        | byContentStarted                                                                                               |
+| adMaxDurationAllowed                                | Advertisement length limitation in seconds                                                                      | +                        | e.g. 30                                                                                                        |
+| subscriber                                          | Disable Ads                                                                                                     | +                        | 1                                                                                                              |
+| publisherUserId                                     | Identifier of your visitor that will be stored in the Trinity player                                            |                          | Any custom identifier, for example a UUID                                                                      |
+| g_cust_params                                       | additional parameters to pass to Google IMA. Should be URL encoded                                              |                          | param1%3Dabc%26param2%3D123                                                                                    |
+| cms                                                 | [cms attribute](#passing-cms-attribute) to automatically index the content created into the CMS                 |                          | cms=%7B%22channelHash%22%3A%22a5gTS...success%22%5D%7D                                                         |
+| themeId                                             | Player theme id                                                                                                 | +                        |                                                                                                                |
+| publisherSections                                   | Use this field to pass the different section of the content page. This will be used for indexing and reporting. | -                        |                                                                                                                |
+| shareEnabled                                        | Enable/disable share functionality                                                                              | +                        | 1/0                                                                                                            |
 
 Just pass the appropriate parameter to Player tag as a query parameter, e.g.
 ```html
@@ -122,11 +131,11 @@ Just pass the appropriate parameter to Player tag as a query parameter, e.g.
 
 The Trinity Player supports some functionality enablement by passing certain parameters to the page URL. That comes in handy for testing features without any code modifications. For example, if Trinity Player is disabled for the unit by default, it is possible to pass `?TRINITY_LOAD_PLAYER=1` in the page URL in order to test it. This allows production environment testing, while other users can't see it until you are ready.
 
-|Name|Description  |Values|
-|--|--|--|
-| TRINITY_FAB | Enable `FAB` functionality | 1|
-|TRINITY_MULTIPLE_ARTICLES_ALG| Enable multiple articles|byContentStarted |
-|TRINITY_FAB_ONLY| Enable/disable FAB-only mode for Trinity Player| 1/0 |
+| Name                          | Description                                     | Values           |
+|-------------------------------|-------------------------------------------------|------------------|
+| TRINITY_FAB                   | Enable `FAB` functionality                      | 1                |
+| TRINITY_MULTIPLE_ARTICLES_ALG | Enable multiple articles                        | byContentStarted |
+| TRINITY_FAB_ONLY              | Enable/disable FAB-only mode for Trinity Player | 1/0              |
 
 Just pass those options as query parameters to your page URL, e.g.
 
@@ -161,11 +170,11 @@ The `onSelectorExists` type uses the same approach as `onSelectorVisible` but in
 
 In some cases, you can't provide all of the content at once on one page, due to lazy-loading text or other types of pagination. This also pertains to cases where getting the full text from the page could be difficult or impossible due to missed semantic HTML. In cases like these, you can use one of the custom ways we offer to pass the text.
 
-| Type | Description |
-|--|--|
-| URL | Read the content using the provided URL. All text on the page will be read
-| URL_BY_PAGE_SELECTOR | Read the content from a provided URL and use a certain CSS selector to filter out the right text
-| WP_JSON_BY_PAGE_SELECTOR | Read the content from WP-JSON API, prefix URL provided on a page using a certain selector
+| Type                     | Description                                                                                      |
+|--------------------------|--------------------------------------------------------------------------------------------------|
+| URL                      | Read the content using the provided URL. All text on the page will be read                       |
+| URL_BY_PAGE_SELECTOR     | Read the content from a provided URL and use a certain CSS selector to filter out the right text |
+| WP_JSON_BY_PAGE_SELECTOR | Read the content from WP-JSON API, prefix URL provided on a page using a certain selector        |
 
 ### Examples
 
@@ -262,35 +271,35 @@ Now, pass two additional parameters to the player:
 
 The Trinity Player provides a simple API for reading its status and controlling it. It's exposed via the global variable `window.TRINITY_PLAYER`.
 
-| Property | Type | Description |
-|--|--|--|
-|constants| Object| Constants used in the API, like event names
-| api | Object| API methods|
-| api.isMultiplePlayers | Boolean | indicates if multiple players are going to be used on the page |
-| api.pause(playerId) | Function | Pause a specific player |
-| api.play(playerId) | Function | Play a specific player. **Please note, it will work only if the user has already clicked play at least once during this session on the page. Otherwise, the browser will throw an error.**  |
-| api.pauseAll() | Function | Pause all players |
-| api.getFirstPlayer() | Function | Returns (first) player id, e.g. 945a52a1149c91eee4b167958b51e406. Useful when 1 instance of the player is used on one page. In case of multiple players, please access via the `players` object|
-| api.createPlayer(playerId) | Function | (Re)create the player for a certain playerId. Please note that the `playerId` should exist in the `TRINITY_PLAYER.players` object. `playerId` is optional. See [Reinit player](#reinit-player)|
-| api.removePlayer(playerId) | Function | Remove a player with a specific playerId. `playerId` is optional. See [Reinit player](#reinit-player) |
-| api.getDuration(playerId) | Function | Get audio duration for specific playerId |
-| api.setVolume(volume, playerId) | Function | Set audio volume for player |
-| api.getVolume(playerId) | Function | Get audio volume for player |
-| api.setMuted(isMuted, playerId) | Function | Mute/unmute player |
-| api.setCurrentTime(time, playerId) | Function | Seek audio to specific position. Time in seconds |
-| api.getCurrentTime(playerId) | Function | Get current audio progress time |
-| [api.getMetadata](#api.getmetadata)() | Function | Get currently playing article's metadata |
-| api.setUserId(userId) | Function | Set your custom identifier for the current visitor dynamically |
-|options| Object|Unit configuration|
-|players|Object|Players configuration|
-|players[playerId]|Object|Configuration of a player under a certain Id|
-|players[playerId].resultReadingText|String|Text that will be read by the player|
-|players[playerId].textSelector|String|CSS text selector|
-|players[playerId].state|String|Player current state. `not-started`, `play`, `pause`|
-|players[playerId].enteredView|Boolean|Tells if the player has been shown during this user session|
-|players[playerId].translateTo|String|Selected translation language|
-|isLoaded| Boolean|indicates if the Trinity initial script has been loaded
-|resultReadingText|String|Text that will be read from the page. Will be overridden with last player in case of multiple players. Check the `players[playerId].resultReadingText` property instead.
+| Property                              | Type     | Description                                                                                                                                                                                     |
+|---------------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| constants                             | Object   | Constants used in the API, like event names                                                                                                                                                     |
+| api                                   | Object   | API methods                                                                                                                                                                                     |
+| api.isMultiplePlayers                 | Boolean  | indicates if multiple players are going to be used on the page                                                                                                                                  |
+| api.pause(playerId)                   | Function | Pause a specific player                                                                                                                                                                         |
+| api.play(playerId)                    | Function | Play a specific player. **Please note, it will work only if the user has already clicked play at least once during this session on the page. Otherwise, the browser will throw an error.**      |
+| api.pauseAll()                        | Function | Pause all players                                                                                                                                                                               |
+| api.getFirstPlayer()                  | Function | Returns (first) player id, e.g. 945a52a1149c91eee4b167958b51e406. Useful when 1 instance of the player is used on one page. In case of multiple players, please access via the `players` object |
+| api.createPlayer(playerId)            | Function | (Re)create the player for a certain playerId. Please note that the `playerId` should exist in the `TRINITY_PLAYER.players` object. `playerId` is optional. See [Reinit player](#reinit-player)  |
+| api.removePlayer(playerId)            | Function | Remove a player with a specific playerId. `playerId` is optional. See [Reinit player](#reinit-player)                                                                                           |
+| api.getDuration(playerId)             | Function | Get audio duration for specific playerId                                                                                                                                                        |
+| api.setVolume(volume, playerId)       | Function | Set audio volume for player                                                                                                                                                                     |
+| api.getVolume(playerId)               | Function | Get audio volume for player                                                                                                                                                                     |
+| api.setMuted(isMuted, playerId)       | Function | Mute/unmute player                                                                                                                                                                              |
+| api.setCurrentTime(time, playerId)    | Function | Seek audio to specific position. Time in seconds                                                                                                                                                |
+| api.getCurrentTime(playerId)          | Function | Get current audio progress time                                                                                                                                                                 |
+| [api.getMetadata](#api.getmetadata)() | Function | Get currently playing article's metadata                                                                                                                                                        |
+| api.setUserId(userId)                 | Function | Set your custom identifier for the current visitor dynamically                                                                                                                                  |
+| options                               | Object   | Unit configuration                                                                                                                                                                              |
+| players                               | Object   | Players configuration                                                                                                                                                                           |
+| players[playerId]                     | Object   | Configuration of a player under a certain Id                                                                                                                                                    |
+| players[playerId].resultReadingText   | String   | Text that will be read by the player                                                                                                                                                            |
+| players[playerId].textSelector        | String   | CSS text selector                                                                                                                                                                               |
+| players[playerId].state               | String   | Player current state. `not-started`, `play`, `pause`                                                                                                                                            |
+| players[playerId].enteredView         | Boolean  | Tells if the player has been shown during this user session                                                                                                                                     |
+| players[playerId].translateTo         | String   | Selected translation language                                                                                                                                                                   |
+| isLoaded                              | Boolean  | indicates if the Trinity initial script has been loaded                                                                                                                                         |
+| resultReadingText                     | String   | Text that will be read from the page. Will be overridden with last player in case of multiple players. Check the `players[playerId].resultReadingText` property instead.                        |
 
 #### api.getMetadata
 
@@ -375,29 +384,29 @@ window.addEventListener('message', (event) => {
 
 *NOTE: In case abtest is enabled every event will contain abtest name in the message body*
 
-| Event name (action) | Description |
-| -- | -- |
-| injectorImp | when injector script is loaded, and `TRINITY_PLAYER` is ready |
-| TRINITY_PLAYER.message.playerReady | Player is ready for use |
-| TRINITY_PLAYER.message.playClicked | Play is clicked |
-| TRINITY_PLAYER.message.pauseClicked | Pause is clicked |
-| TRINITY_PLAYER.message.resumed | Player resumed |
-| TRINITY_PLAYER.message.contentStarted | Audio content started |
-| TRINITY_PLAYER.message.onFirstQuartile | Audio content is 25% complete |
-| TRINITY_PLAYER.message.onMidPoint | Audio content is 50% complete |
-| TRINITY_PLAYER.message.onThirdQuartile | Audio content is 75% complete |
-| TRINITY_PLAYER.message.onComplete | Audio content is completed |
-| TRINITY_PLAYER.message.adOpp | Ad being requested |
-| TRINITY_PLAYER.message.onAdStarted | Ad is started |
-| TRINITY_PLAYER.message.onAdComplete | Ad is completed |
-| TRINITY_PLAYER.message.enteredView | Player being in view |
-| TRINITY_PLAYER.message.exitedView | Player being out of view |
-| TRINITY_PLAYER.message.FABShow | Player in FAB mode being in view |
-| TRINITY_PLAYER.message.FABHide | Player in FAB mode being out of view |
-| TRINITY_PLAYER.message.touchStart | Touch started (mobile only) |
-| TRINITY_PLAYER.message.touchEnd | Touch ended (mobile only) |
-| TRINITY_PLAYER.message.scrubbing | Audio scrubbed |
-| TRINITY_PLAYER.message.translateTo | Translation was selected |
+| Event name (action)                    | Description                                                   |
+|----------------------------------------|---------------------------------------------------------------|
+| injectorImp                            | when injector script is loaded, and `TRINITY_PLAYER` is ready |
+| TRINITY_PLAYER.message.playerReady     | Player is ready for use                                       |
+| TRINITY_PLAYER.message.playClicked     | Play is clicked                                               |
+| TRINITY_PLAYER.message.pauseClicked    | Pause is clicked                                              |
+| TRINITY_PLAYER.message.resumed         | Player resumed                                                |
+| TRINITY_PLAYER.message.contentStarted  | Audio content started                                         |
+| TRINITY_PLAYER.message.onFirstQuartile | Audio content is 25% complete                                 |
+| TRINITY_PLAYER.message.onMidPoint      | Audio content is 50% complete                                 |
+| TRINITY_PLAYER.message.onThirdQuartile | Audio content is 75% complete                                 |
+| TRINITY_PLAYER.message.onComplete      | Audio content is completed                                    |
+| TRINITY_PLAYER.message.adOpp           | Ad being requested                                            |
+| TRINITY_PLAYER.message.onAdStarted     | Ad is started                                                 |
+| TRINITY_PLAYER.message.onAdComplete    | Ad is completed                                               |
+| TRINITY_PLAYER.message.enteredView     | Player being in view                                          |
+| TRINITY_PLAYER.message.exitedView      | Player being out of view                                      |
+| TRINITY_PLAYER.message.FABShow         | Player in FAB mode being in view                              |
+| TRINITY_PLAYER.message.FABHide         | Player in FAB mode being out of view                          |
+| TRINITY_PLAYER.message.touchStart      | Touch started (mobile only)                                   |
+| TRINITY_PLAYER.message.touchEnd        | Touch ended (mobile only)                                     |
+| TRINITY_PLAYER.message.scrubbing       | Audio scrubbed                                                |
+| TRINITY_PLAYER.message.translateTo     | Translation was selected                                      |
 
 
 ### Multiple Players
