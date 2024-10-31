@@ -2,8 +2,8 @@
 
 *This document describes how to integrate Pulse Player into a page, how to configure and control it*
 
-> Updated: Jan 3, 2024
-> Document version: 2.1
+> Updated: Oct 31, 2024
+> Document version: 2.2
 
 ## Integration
 
@@ -68,6 +68,48 @@ settings in your campaign for all players.
 | language                           | i18n                                                                                                                | +                        | en, it, uk, etc                                                      |
 | expandedURL                        | custom link for expand icon in top right. By default - it's playlist share URL based on playlist hash               | -                        |                                                                      |
 | expandedURLTarget                  | Where to open expanded link. By default it's open in a new tab (_blank). But can be open on the same page (_parent) | -                        | _blank (default, new tab), _parent (same page where Pulse player is) |
+
+## API
+
+The Trinity Player provides a simple API for reading its status and controlling it. It's exposed via the global variable `window.TRINITY_PULSE`.
+
+| Property                        | Type     | Description                                                                                                                                                                                |
+|---------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| api                             | Object   | API methods                                                                                                                                                                                |
+| api.pause(playerId)             | Function | Pause a specific player                                                                                                                                                                    |
+| api.play(playerId)              | Function | Play a specific player. **Please note, it will work only if the user has already clicked play at least once during this session on the page. Otherwise, the browser will throw an error.** |
+| api.pauseAll()                  | Function | Pause all players                                                                                                                                                                          |
+| api.getFirstPlayer()            | Function | Returns the first player's id, e.g. 945a52a1149c91eee4b167958b51e406                                                                                                                       |
+| api.createPlayer(playerId)      | Function | (Re)create the player for a certain playerId. Please note that the `playerId` should exist in the `TRINITY_PULSE.players` object. `playerId` is optional                                   |
+| api.removePlayer(playerId)      | Function | Remove a player specified by `playerId`. The `playerId` parameter is optional                                                                                                              |
+| api.setVolume(volume, playerId) | Function | Set audio volume for player                                                                                                                                                                |
+| api.getVolume(playerId)         | Function | Get audio volume for player                                                                                                                                                                |
+| players                         | Object   | Players configuration                                                                                                                                                                      |
+| players[playerId]               | Object   | Configuration of a player under a certain Id                                                                                                                                               |
+| isLoaded                        | Boolean  | indicates if the Trinity initial script has been loaded                                                                                                                                    |
+
+#### Events
+
+*NOTE: In case abtest is enabled every event will contain abtest name in the message body*
+
+| Event name (action)                   | Description                                                  |
+|---------------------------------------|--------------------------------------------------------------|
+| injectorImp                           | when injector script is loaded, and `TRINITY_PULSE` is ready |
+| TRINITY_PULSE.message.playerReady     | Player is ready for use                                      |
+| TRINITY_PULSE.message.playClicked     | Play is clicked                                              |
+| TRINITY_PULSE.message.pauseClicked    | Pause is clicked                                             |
+| TRINITY_PULSE.message.resumed         | Player resumed                                               |
+| TRINITY_PULSE.message.contentStarted  | Audio content started                                        |
+| TRINITY_PULSE.message.onFirstQuartile | Audio content is 25% complete                                |
+| TRINITY_PULSE.message.onMidPoint      | Audio content is 50% complete                                |
+| TRINITY_PULSE.message.onThirdQuartile | Audio content is 75% complete                                |
+| TRINITY_PULSE.message.onComplete      | Audio content is completed                                   |
+| TRINITY_PULSE.message.adOpp           | Ad being requested                                           |
+| TRINITY_PULSE.message.onAdStarted     | Ad is started                                                |
+| TRINITY_PULSE.message.onAdComplete    | Ad is completed                                              |
+| TRINITY_PULSE.message.touchStart      | Touch started (mobile only)                                  |
+| TRINITY_PULSE.message.touchEnd        | Touch ended (mobile only)                                    |
+| TRINITY_PULSE.message.scrubbing       | Audio scrubbed                                               |
 
 #### Encode parameters
 
