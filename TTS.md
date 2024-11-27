@@ -2,8 +2,8 @@
 
 *This document describes how to integrate the Trinity Audio Player into a page as well as how to configure and control it*
 
-> Updated: Oct 7, 2024
-> Document version: 3.2
+> Updated: Nov 22, 2024
+> Document version: 3.3
 
 ## Integration
 
@@ -270,6 +270,7 @@ Now, pass two additional parameters to the player:
 ## API
 
 The Trinity Player provides a simple API for reading its status and controlling it. It's exposed via the global variable `window.TRINITY_PLAYER`.
+Each method has `getSignature()` method that returns its signature.
 
 | Property                              | Type     | Description                                                                                                                                                                                                                            |
 |---------------------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -386,30 +387,31 @@ window.addEventListener('message', (event) => {
 
 *NOTE: In case abtest is enabled every event will contain abtest name in the message body*
 
-| Event name (action)                    | Description                                                   |
-|----------------------------------------|---------------------------------------------------------------|
-| injectorImp                            | when injector script is loaded, and `TRINITY_PLAYER` is ready |
-| TRINITY_PLAYER.message.playerReady     | Player is ready for use                                       |
-| TRINITY_PLAYER.message.playClicked     | Play is clicked                                               |
-| TRINITY_PLAYER.message.pauseClicked    | Pause is clicked                                              |
-| TRINITY_PLAYER.message.resumed         | Player resumed                                                |
-| TRINITY_PLAYER.message.contentStarted  | Audio content started                                         |
-| TRINITY_PLAYER.message.onFirstQuartile | Audio content is 25% complete                                 |
-| TRINITY_PLAYER.message.onMidPoint      | Audio content is 50% complete                                 |
-| TRINITY_PLAYER.message.onThirdQuartile | Audio content is 75% complete                                 |
-| TRINITY_PLAYER.message.onComplete      | Audio content is completed                                    |
-| TRINITY_PLAYER.message.adOpp           | Ad being requested                                            |
-| TRINITY_PLAYER.message.onAdStarted     | Ad is started                                                 |
-| TRINITY_PLAYER.message.onAdComplete    | Ad is completed                                               |
-| TRINITY_PLAYER.message.enteredView     | Player being in view                                          |
-| TRINITY_PLAYER.message.exitedView      | Player being out of view                                      |
-| TRINITY_PLAYER.message.FABShow         | Player in FAB mode being in view                              |
-| TRINITY_PLAYER.message.FABHide         | Player in FAB mode being out of view                          |
-| TRINITY_PLAYER.message.touchStart      | Touch started (mobile only)                                   |
-| TRINITY_PLAYER.message.touchEnd        | Touch ended (mobile only)                                     |
-| TRINITY_PLAYER.message.scrubbing       | Audio scrubbed                                                |
-| TRINITY_PLAYER.message.translateTo     | Translation was selected                                      |
-
+| Event name (action)                       | Description                                                                                                                                                           |
+|-------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| injectorImp                               | when injector script is loaded, and `TRINITY_PLAYER` is ready                                                                                                         |
+| TRINITY_PLAYER.message.playerReady        | Player is ready for use                                                                                                                                               |
+| TRINITY_PLAYER.message.playClicked        | Play is clicked                                                                                                                                                       |
+| TRINITY_PLAYER.message.pauseClicked       | Pause is clicked                                                                                                                                                      |
+| TRINITY_PLAYER.message.resumed            | Player resumed                                                                                                                                                        |
+| TRINITY_PLAYER.message.contentStarted     | Audio content started                                                                                                                                                 |
+| TRINITY_PLAYER.message.onFirstQuartile    | Audio content is 25% complete                                                                                                                                         |
+| TRINITY_PLAYER.message.onMidPoint         | Audio content is 50% complete                                                                                                                                         |
+| TRINITY_PLAYER.message.onThirdQuartile    | Audio content is 75% complete                                                                                                                                         |
+| TRINITY_PLAYER.message.onComplete         | Audio content is completed                                                                                                                                            |
+| TRINITY_PLAYER.message.adOpp              | Ad being requested                                                                                                                                                    |
+| TRINITY_PLAYER.message.onAdStarted        | Ad is started                                                                                                                                                         |
+| TRINITY_PLAYER.message.onAdComplete       | Ad is completed                                                                                                                                                       |
+| TRINITY_PLAYER.message.enteredView        | Player being in view                                                                                                                                                  |
+| TRINITY_PLAYER.message.exitedView         | Player being out of view                                                                                                                                              |
+| TRINITY_PLAYER.message.FABShow            | Player in FAB mode being in view                                                                                                                                      |
+| TRINITY_PLAYER.message.FABHide            | Player in FAB mode being out of view                                                                                                                                  |
+| TRINITY_PLAYER.message.touchStart         | Touch started (mobile only)                                                                                                                                           |
+| TRINITY_PLAYER.message.touchEnd           | Touch ended (mobile only)                                                                                                                                             |
+| TRINITY_PLAYER.message.scrubbing          | Audio scrubbed                                                                                                                                                        |
+| TRINITY_PLAYER.message.translateTo        | Translation was selected                                                                                                                                              |
+| TRINITY_PULSE.message.updateMediaMetadata | When [MediaMetadata](https://developer.mozilla.org/en-US/docs/Web/API/MediaMetadata) has been updated with cover image, title, author, etc                            |
+| TRINITY_PULSE.message.mediaSessionAction  | When a media control action, such as play, pause, next, previous, seek is performed using external interfaces like the Control Center or other media session handlers |
 
 ### Multiple Players
 
