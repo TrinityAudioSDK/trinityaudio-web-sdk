@@ -2,8 +2,8 @@
 
 *This document describes how to integrate Pulse Player into a page, how to configure and control it*
 
-> Updated: Nov 22, 2024
-> Document version: 2.5
+> Updated: Dec 5, 2024
+> Document version: 2.6
 
 ## Integration
 
@@ -120,6 +120,7 @@ Each method has `getSignature()` method that returns its signature.
 | TRINITY_PULSE.message.mediaSessionAction                | When a media control action, such as play, pause, next, previous, seek is performed using external interfaces like the Control Center or other media session handlers |
 | TRINITY_PULSE.message.browseModeToggleView              | When player toggle from one view mode to another. Used only when toggleMode is used                                                                                   |
 | TRINITY_PULSE.message.browseModeToggleViewTransitionEnd | When toggleMode is used and animation is enabled, fires when animation is finished                                                                                    |
+| TRINITY_PULSE.message.playedAllTracks                   | When all tracks were played                                                                                                                                           |
 
 #### Encode parameters
 

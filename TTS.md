@@ -2,8 +2,8 @@
 
 *This document describes how to integrate the Trinity Audio Player into a page as well as how to configure and control it*
 
-> Updated: Nov 22, 2024
-> Document version: 3.3
+> Updated: Jan 16, 2025
+> Document version: 4.0
 
 ## Integration
 
@@ -415,11 +415,33 @@ window.addEventListener('message', (event) => {
 
 ### Multiple Players
 
-There are two ways to do that:
-1. set `window.__trinityMultiplePlayers__` to `true`
-2. set `window.TRINITY_PLAYER.api.isMultiplePlayers` to `true`
+#### What Are "Multiple Players"?
+The "Multiple Players" feature allows clients to implement more than one Trinity Text-to-Speech (TTS) player on a single webpage. This can be useful for pages that host different content pieces that are not related to each other, such as an infinite scroll experience that loads one story after another, enabling users to interact with multiple audio players independently.
 
-In the first case you don't need to wait until the Trinity Player initial script is loaded, and can set the value right away. In the second case you have to wait until the Trinity Player initial script is loaded, and listen to a certain event:
+#### Prerequisites
+Multiple players on one page are supported via [Read content from remote URL](#read-content-from-remote-url) approach.
+
+#### How to Enable Multiple Players
+Here are the two ways to enable this:
+
+___1. set `window.__trinityMultiplePlayers__` to `true`___
+
+This can be done immediately, even before the Trinity Player initial script is loaded:
+```
+<script>
+    window.__trinityMultiplePlayers__ = true;
+</script>
+```
+Advantages:
+* Simple to implement.
+* No need to wait for the Trinity Player script to load.
+
+Disadvantages:
+* Pollutes the global scope, which can potentially lead to naming conflicts.
+
+__2. set `window.TRINITY_PLAYER.api.isMultiplePlayers` to `true`__
+
+Set window.TRINITY_PLAYER.api.isMultiplePlayers to true after the Trinity Player initial script has loaded. This requires listening for an event:
 
 ```javascript
 window.addEventListener('message', (event) => {
@@ -432,11 +454,38 @@ window.addEventListener('message', (event) => {
 });
 ```
 
-The first case is much simpler, but pollutes the global scope.
+Advantages:
+* Keeps the global scope clean.
 
-Setting Trinity Player to multiple player mode disables `FAB` functionality and automatically enables support for **one playing player at a time**. So if a page has, say, 3 players, once the user clicks on the first one, it will start playing. When the user clicks on the second one - the first one will stop and second one will start playing, and so on..
+Disadvantages:
+* Requires waiting for the Trinity Player script to load and listening to events.
+* Slightly more complex to implement.
 
-If you are planning to control each player manually via the **API**, you have to set a unique `data-player-id` attribute to each Trinity tag.
+#### Key Functionalities in Multiple Player Mode
+
+1. One Active Player at a Time:
+    * When multiple players are enabled, only one player can be active at a time. For example, if a page has three players, clicking on one player starts playback, and any currently playing player will stop.
+2. FAB Functionality Disabled:
+    * Enabling multiple players automatically disables the Floating Action Button (FAB) functionality.
+3. Unique Player Identification:
+    * To manually control players via the API, each player must have a unique data-player-id attribute assigned:
+```
+<script data-player-id="player-1" src="..."></script>
+<script data-player-id="player-2" src="..."></script>
+<script data-player-id="player-3" src="..."></script>
+```
+#### Controlling Players via API
+Once multiple players are enabled, you can control them programmatically using the Trinity Player API. For example:
+```
+// Pause Player 3
+window.TRINITY_PLAYER.api.pause('player-3');
+
+// Play Player 3
+window.TRINITY_PLAYER.api.play('player-3');
+```
+By following these steps and understanding the pros and cons of each approach, you can seamlessly integrate multiple TTS players into your webpage while ensuring a smooth user experience.
+
+#### Example: Adding Multiple Players to a Page
 
 ```html
 <html lang="en">
@@ -447,34 +496,53 @@ If you are planning to control each player manually via the **API**, you have to
   </head>
   <body>
     <div class="content">Hello!</div>
-    <script data-player-id="player-1"
-      src="https://trinitymedia.ai/player/trinity/XXXXXXX/" charset="UTF-8"></script>
+
+    <!-- enable Multiple Players on one page -->
+    <script>
+        window.__trinityMultiplePlayers__ = true;
+    </script>
+
+    <!-- first player, pageURL: https://example.com/page-1, remote reading URL: https://example.com/article-1 -->
+    <div class="trinity-tts-pb" dir="ltr" style="font: 12px / 18px Verdana, Arial; height: 80px; line-height: 80px; text-align: left; margin: 0 0 0 82px;">
+        <strong style="font-weight: 400">Getting your <a href="//trinityaudio.ai" style="color: #4b4a4a; text-decoration: none; font-weight: 700;">Trinity Audio</a> player ready...</strong>
+    </div>
+    <script
+        data-player-id="player-1"
+        src="https://trinitymedia.ai/player/trinity/XXXXXXX/?pageURL=https%3A%2F%2Fexample.com%2Fpage-1&readContentType=URL&readContentConfig=%7B%22url%22%3A%22https%3A%2F%2Fexample.com%2Farticle-1%22%2C%22dataType%22%3A%22html%22%7D"
+        charset="UTF-8">
+    </script>
     <article class="article-1"></article>
 
-    <script data-player-id="player-2"
-      src="https://trinitymedia.ai/player/trinity/XXXXXXX/" charset="UTF-8"></script>
+    <!-- second player pageURL: https://example.com/page-1, remote reading URL: https://example.com/article-2 -->
+    <div class="trinity-tts-pb" dir="ltr" style="font: 12px / 18px Verdana, Arial; height: 80px; line-height: 80px; text-align: left; margin: 0 0 0 82px;">
+        <strong style="font-weight: 400">Getting your <a href="//trinityaudio.ai" style="color: #4b4a4a; text-decoration: none; font-weight: 700;">Trinity Audio</a> player ready...</strong>
+    </div>
+    <script
+        data-player-id="player-2"
+        src="https://trinitymedia.ai/player/trinity/XXXXXXX/?pageURL=https%3A%2F%2Fexample.com%2Fpage-1?readContentType=URL&readContentConfig=%7B%22url%22%3A%22https%3A%2F%2Fexample.com%2Farticle-2%22%2C%22dataType%22%3A%22html%22%7D"
+        charset="UTF-8">
+    </script>
     <article class="article-2"></article>
 
-    <script data-player-id="player-3"
-      src="https://trinitymedia.ai/player/trinity/XXXXXXX/" charset="UTF-8"></script>
+    <!-- third player pageURL: https://example.com/page-1, remote reading URL: https://example.com/article-3 -->
+    <div class="trinity-tts-pb" dir="ltr" style="font: 12px / 18px Verdana, Arial; height: 80px; line-height: 80px; text-align: left; margin: 0 0 0 82px;">
+        <strong style="font-weight: 400">Getting your <a href="//trinityaudio.ai" style="color: #4b4a4a; text-decoration: none; font-weight: 700;">Trinity Audio</a> player ready...</strong>
+    </div>
+    <script
+        data-player-id="player-3"
+        src="https://trinitymedia.ai/player/trinity/XXXXXXX/?pageURL=https%3A%2F%2Fexample.com%2Fpage-1&readContentType=URL&readContentConfig=%7B%22url%22%3A%22https%3A%2F%2Fexample.com%2Farticle-3%22%2C%22dataType%22%3A%22html%22%7D"
+        charset="UTF-8">
+    </script>
     <article class="article-3"></article>
   </body>
 </html>
 ```
 
-Setting that, you are able to control a player via the **API**, calling **pause()**, **play()** methods passing a corresponding player ID, e.g.
-
-```javascript
-window.TRINITY_PLAYER.api.pause('player-3');
-window.TRINITY_PLAYER.api.play('player-3');
-```
-
-Also note, **pageURL** is a required field when using multiple players as well and is expected to pass a unique value per content.
-
 ### Custom text selector
 
-Note - This is a custom setting - and only available to enterprise customers.
-By default, the text selector is controlled by the unit configuration. But if you want to take control over it, or use multiple players on one page, say, in an SPA, you can pass you own CSS text selector. This technique is useful when you have multiple articles on a page and want each player to read its own article.
+**Note - This is a custom setting - and only available to enterprise customers after approval from Trinity Audio (please contact support for further details).**
+
+By default, the text selector is controlled by the unit configuration. But if you want to take control over it, you can pass you own CSS text selector.
 
 In order to do that, just pass a `textSelector` parameter to Trinity tag. Selector value should be encoded into base64 and the resulting string should be URI encoded.
 
