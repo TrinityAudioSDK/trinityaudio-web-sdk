@@ -2,8 +2,8 @@
 
 *This document describes how to integrate the Trinity Audio Player into a page as well as how to configure and control it*
 
-> Updated: Jan 16, 2025
-> Document version: 4.0
+> Updated: Nov 13, 2025
+> Document version: 4.1
 
 ## Integration
 
@@ -103,8 +103,6 @@ settings on the unit level for all pages.
 | partner                                             | Partner name                                                                                                    |                          |
 | FAB                                                 | FAB view. Player becomes small FAB when user scrolls and player disappears from view                            | +                        | fab, fabAfterView, fabAfterClick, fabOnly, none                                                                |
 | abtest                                              | A/B testing for player view. For more information please contact us.                                            | +                        |
-| voiceGender                                         | Gender of voice                                                                                                 | +                        | m, f. NOTE: Rewrites gender if set                                                                             |
-| voiceId                                             | Desired voice ID                                                                                                | +                        | To get the full list of supported voice ID's visit the dashboard and choose at the Player configuration screen |
 | playbackSpeed                                       | Reading speed                                                                                                   | +                        | 0.5 - 2                                                                                                        |
 | textSelector                                        | [Custom text selector](#custom-text-selector)                                                                   | +                        |
 | readContentType                                     | URL to read text from instead of the original one, located by provider selector                                 | +                        |
@@ -120,6 +118,7 @@ settings on the unit level for all pages.
 | themeId                                             | Player theme id                                                                                                 | +                        |                                                                                                                |
 | publisherSections                                   | Use this field to pass the different section of the content page. This will be used for indexing and reporting. |                          |                                                                                                                |
 | shareEnabled                                        | Enable/disable share functionality                                                                              | +                        | 1/0                                                                                                            |
+| subscriptionLockedPreviewEnabled                    | Enable/disable subscription locked preview config                                                               | +                        | 1/0                                                                                                            |
 
 Just pass the appropriate parameter to Player tag as a query parameter, e.g.
 ```html
@@ -132,10 +131,11 @@ Just pass the appropriate parameter to Player tag as a query parameter, e.g.
 
 The Trinity Player supports some functionality enablement by passing certain parameters to the page URL. That comes in handy for testing features without any code modifications. For example, if Trinity Player is disabled for the unit by default, it is possible to pass `?TRINITY_LOAD_PLAYER=1` in the page URL in order to test it. This allows production environment testing, while other users can't see it until you are ready.
 
-| Name                          | Description                                     | Values                                    |
-|-------------------------------|-------------------------------------------------|-------------------------------------------|
-| TRINITY_FAB                   | Enable `FAB` functionality                      | fab, fabAfterView, fabAfterClick, fabOnly |
-| TRINITY_MULTIPLE_ARTICLES_ALG | Enable multiple articles                        | byContentStarted                          |
+| Name                                | Description                                                              | Values                                    |
+|-------------------------------------|--------------------------------------------------------------------------|-------------------------------------------|
+| TRINITY_FAB                         | Enable `FAB` functionality                                               | fab, fabAfterView, fabAfterClick, fabOnly |
+| TRINITY_MULTIPLE_ARTICLES_ALG       | Enable multiple articles                                                 | byContentStarted                          |
+| SUBSCRIPTION_LOCKED_PREVIEW_ENABLED | Enable/disable subscription locked preview config                        | byContentStarted                          |
 
 Just pass those options as query parameters to your page URL, e.g.
 
