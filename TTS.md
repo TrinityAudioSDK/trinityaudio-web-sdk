@@ -2,8 +2,8 @@
 
 *This document describes how to integrate the Trinity Audio Player into a page as well as how to configure and control it*
 
-> Updated: Nov 13, 2025
-> Document version: 4.1
+> Updated: Dec 8, 2025
+> Document version: 4.2
 
 ## Integration
 
@@ -293,6 +293,7 @@ Each method has `getSignature()` method that returns its signature.
 | api.getCurrentTime(playerId)          | Function | Get current audio progress time                                                                                                                                                                                                        |
 | [api.getMetadata](#api.getmetadata)() | Function | Get currently playing article's metadata                                                                                                                                                                                               |
 | api.setUserId(userId)                 | Function | Set your custom identifier for the current visitor dynamically                                                                                                                                                                         |
+| api.setAdFreeSubscriber(playerId)     | Function | Disable ads for a player (This is a custom method - and only available to enterprise customers after approval from Trinity Audio, please contact support for further details).                                                         |
 | options                               | Object   | Unit configuration                                                                                                                                                                                                                     |
 | players                               | Object   | Players configuration                                                                                                                                                                                                                  |
 | players[playerId]                     | Object   | Configuration of a player under a certain Id                                                                                                                                                                                           |
