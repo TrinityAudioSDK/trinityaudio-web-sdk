@@ -2,8 +2,8 @@
 
 *This document describes how to integrate the Trinity Audio Player into a page as well as how to configure and control it*
 
-> Updated: Dec 8, 2025
-> Document version: 4.2
+> Updated: Dec 23, 2025
+> Document version: 4.3
 
 ## Integration
 
@@ -99,7 +99,7 @@ settings on the unit level for all pages.
 |-----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|--------------------------|----------------------------------------------------------------------------------------------------------------|
 | **XXXXXXX**                                         | **Required**. Your unit ID                                                                                      |                          |                                                                                                                |
 | [**pageURL**](#encode-pageurl)                      | **Required**. Encoded URL of your page                                                                          |                          | e.g. https%3A%2F%2F<br>example.com%2Fpage-1%2Farticle-1                                                        |
-| language                                            | Text language                                                                                                   | +                        | en, es, it, fr, de, pt                                                                                         |
+| language                                            | Text locale (language and region). Use format like en-US or es-ES. Using only en or es will work but won't allow configuring different accents for the same language. | +                        | en-US, es-ES, it-IT, fr-FR, de-DE, pt-PT (or en, es, it, fr, de, pt for basic support)                         |
 | partner                                             | Partner name                                                                                                    |                          |
 | FAB                                                 | FAB view. Player becomes small FAB when user scrolls and player disappears from view                            | +                        | fab, fabAfterView, fabAfterClick, fabOnly, none                                                                |
 | abtest                                              | A/B testing for player view. For more information please contact us.                                            | +                        |
@@ -324,7 +324,7 @@ Example result:
     description: "Test Description",
     faviconURL: "https://www.example.com/favicon.ico",
     imageURL: "https://www.example.com/image.png",
-    language: "en",
+    language: "en-US",
     publisher: "Test Publisher",
     title: "Test Title"
 }
