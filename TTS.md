@@ -2,8 +2,8 @@
 
 *This document describes how to integrate the Trinity Audio Player into a page as well as how to configure and control it*
 
-> Updated: Dec 23, 2025
-> Document version: 4.3
+> Updated: Jan 20, 2026
+> Document version: 4.4
 
 ## Integration
 
@@ -111,7 +111,6 @@ settings on the unit level for all pages.
 | [documentLoadTypeSelector](#document-load-scenario) | [CSS selector](#passing-css-selector) when `documentLoadType` is `onSelectorVisible` or `onSelectorExists` type | +                        |                                                                                                                |
 | multipleArticlesAlg                                 | Enable playlist of popular articles from the same domain                                                        | +                        | byContentStarted                                                                                               |
 | adMaxDurationAllowed                                | Advertisement length limitation in seconds                                                                      | +                        | e.g. 30                                                                                                        |
-| subscriber                                          | Disable Ads                                                                                                     | +                        | 1                                                                                                              |
 | publisherUserId                                     | Identifier of your visitor that will be stored in the Trinity player                                            |                          | Any custom identifier, for example a UUID                                                                      |
 | g_cust_params                                       | additional parameters to pass to Google IMA. Should be URL encoded                                              |                          | param1%3Dabc%26param2%3D123                                                                                    |
 | cms                                                 | [cms attribute](#passing-cms-attribute) to automatically index the content created into the CMS                 |                          | cms=%7B%22channelHash%22%3A%22a5gTS...success%22%5D%7D                                                         |
@@ -355,6 +354,16 @@ window.addEventListener('message', (event) => {
     // now API is ready via window.TRINITY_PLAYER.api
   }
 });
+```
+
+#### Disable ads
+
+**Note - This is a custom method - and only available to enterprise customers after approval from Trinity Audio (please contact support for further details).**
+
+To disable ads, use the `setAdFreeSubscriber` API method after the injector script is ready (see code example above):
+
+```javascript
+  window.TRINITY_PLAYER.api.setAdFreeSubscriber();
 ```
 
 #### Listen for events
