@@ -2,8 +2,8 @@
 
 *This document describes how to integrate the Trinity Audio Player into a page as well as how to configure and control it*
 
-> Updated: Mar 31, 2026
-> Document version: 4.5
+> Updated: Aug 20, 2026
+> Document version: 4.7
 
 ## Integration
 
@@ -104,6 +104,7 @@ settings on the unit level for all pages.
 | FAB                                                 | FAB view. Player becomes small FAB when user scrolls and player disappears from view                                                                  | +                        | fab, fabAfterView, fabAfterClick, fabOnly, none                           |
 | abtest                                              | A/B testing for player view. For more information please contact us.                                                                                  | +                        |
 | playbackSpeed                                       | Reading speed                                                                                                                                         | +                        | 0.5 - 2                                                                   |
+| startPosition                                       | Playback start offset in seconds, applied on the first play                                                                                          |                          | e.g. 63.5                                                                 |
 | textSelector                                        | [Custom text selector](#custom-text-selector)                                                                                                         | +                        |
 | readContentType                                     | URL to read text from instead of the original one, located by provider selector                                                                       | +                        |
 | readContentConfig                                   | [JSON config](#passing-config)                                                                                                                        | +                        |
@@ -118,6 +119,8 @@ settings on the unit level for all pages.
 | publisherSections                                   | Use this field to pass the different section of the content page. This will be used for indexing and reporting.                                       |                          |                                                                           |
 | shareEnabled                                        | Enable/disable share functionality                                                                                                                    | +                        | 1/0                                                                       |
 | subscriptionLockedPreviewEnabled                    | Enable/disable subscription locked preview config                                                                                                     | +                        | 1/0                                                                       |
+| subscriptionLockedURL                               | Encoded URL of your subscribe page, opened on click in the subscription-locked player. Falls back to the `subscription-locked.url` theme property     | +                        | e.g. https%3A%2F%2F<br>example.com%2Fsubscribe                            |
+| subscriptionLockedClickArea                         | Click area that opens `subscriptionLockedURL` in the subscription-locked player: the whole player surface or the "Subscribe to listen" banner only. Falls back to the `subscription-locked.click-area` theme property | +                        | player (default), banner                                                  |
 
 Just pass the appropriate parameter to Player tag as a query parameter, e.g.
 ```html
